@@ -24,10 +24,34 @@ const parseForm = bodyParser.urlencoded({
     extended: true
 });
 
-const { stuff } = require('./models');
+const { 
+    stuff,
+    users
+} = require('./models');
 // The equivalent:
 // const models = require('./models');
 // const stuff = models.stuff;
+
+app.get('/signup', (req, res) => {
+    res.render('user-auth');
+});
+
+app.post('/signup', parseForm, (req, res) => {
+    // console.log(req.body);
+    const { username, password } = req.body;
+    users.create(username, password);
+    res.redirect('/login');
+});
+
+app.get('/login', (req, res) => {
+    res.render('user-auth');
+});
+
+app.post('/login', parseForm, (req, res) => {
+    const { username, password } = req.body;
+    const didLogin = users.login(username, password);
+    console.log(didLogin);
+});
 
 app.get('/', (req, res) => {
     console.log(stuff.all());
