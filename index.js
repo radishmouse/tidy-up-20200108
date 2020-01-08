@@ -24,23 +24,34 @@ const parseForm = bodyParser.urlencoded({
     extended: true
 });
 
+const { stuff } = require('./models');
+// The equivalent:
+// const models = require('./models');
+// const stuff = models.stuff;
+
 app.get('/', (req, res) => {
+    console.log(stuff.all());
     res.send('HELLOOOOOOOO!');
 });
 
 app.get('/create', (req, res) => {
-    console.log('yes they did a GET Request')
+    console.log(stuff.all());
     res.render('form');
 });
 
 app.post('/create', parseForm, (req, res) => {
     console.log('Hooray a POST!!!');
     console.log(req.body);
+    const {name, givesJoy} = req.body;
+    // const name = req.body.name;
+    // const givesJoy = req.body.givesJoy;
+    stuff.create(name, givesJoy);
     // reading the data from the form
     res.redirect('/create/success');
 });
 
 app.get('/create/success', (req, res) => {
+    console.log(stuff.all());
     res.send('success!');
 });
 
